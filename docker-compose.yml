@@ -1,0 +1,44 @@
+name: ${COMPOSE_PROJECT_NAME:?COMPOSE_PROJECT_NAME is required}
+
+x-hosts:
+  searxng: &host-searxng searxng.${BASE_DOMAIN:?BASE_DOMAIN is required}
+
+services:
+  searxng:
+    build:
+      context: ./searxng
+      args:
+        SEARXNG_VERSION: ${SEARXNG_VERSION:?SEARXNG_VERSION is required}
+        BUILD_DATE: ${BUILD_DATE:-unknown}
+    image: searxng-custom:${SEARXNG_VERSION:?SEARXNG_VERSION is required}
+    restart: unless-stopped
+    expose:
+      - "8080"
+    environment:
+      # Reverse-proxy contract: HTTP-only (no SSL), so only VIRTUAL_HOST.
+      VIRTUAL_HOST: *host-searxng
+      VIRTUAL_PORT: "8080"
+      BASE_URL: http://searxng.${BASE_DOMAIN:?BASE_DOMAIN is required}/
+      SEARXNG_SECRET: ${SEARXNG_SECRET:?SEARXNG_SECRET is required}
+    volumes:
+      - searxng-config:/etc/searxng
+    networks:
+      - default
+      - web-proxy
+    labels:
+      homepage.group: ${HOMEPAGE_GROUP:-Search}
+      homepage.name: ${HOMEPAGE_NAME:-SearXNG}
+      homepage.icon: ${HOMEPAGE_ICON:-searxng}
+      homepage.href: http://searxng.${BASE_DOMAIN:?BASE_DOMAIN is required}/
+      homepage.description: ${HOMEPAGE_DESCRIPTION:-Privacy-respecting metasearch engine}
+
+networks:
+  default:
+    name: ${COMPOSE_PROJECT_NAME:?COMPOSE_PROJECT_NAME is required}_default
+  web-proxy:
+    name: ${NGINX_PROXY_NETWORK:-web-proxy}
+    external: true
+
+volumes:
+  searxng-config:
+    name: ${COMPOSE_PROJECT_NAME:?COMPOSE_PROJECT_NAME is required}_searxng-config

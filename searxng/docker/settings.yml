@@ -1,0 +1,75 @@
+# SearXNG seed settings. Merged over the upstream defaults
+# (use_default_settings: true), seeded into the volume on first start only.
+# Docs: https://docs.searxng.org/admin/settings/
+
+use_default_settings: true
+
+server:
+  secret_key: "ultrasecretkey"
+  image_proxy: true
+  default_theme: simple
+  search_form_format: standard
+
+search:
+  safe_search: 0
+  autocomplete: "brave"
+  default_lang: "all"
+  formats:
+    - html
+    - json
+
+engines:
+  - name: ahmia
+    disabled: true
+  - name: torch
+    disabled: true
+  - name: brave
+    disabled: true
+  - name: bing
+    timeout: 6.0
+    weight: 2
+  - name: duckduckgo
+    weight: 2
+  - name: mojeek
+    weight: 2
+  - name: marginalia
+    weight: 2
+  - name: startpage
+    disabled: true
+  - name: google
+    disabled: true
+  - name: cloudflareai
+    disabled: true
+  - name: redtube
+    engine: json_engine
+    shortcut: redt
+    categories: [videos]
+    paging: true
+    first_page_num: 1
+    search_url: "https://api.redtube.com/?data=redtube.Videos.searchVideos&search={query}&output=json&page={pageno}"
+    results_query: videos
+    url_query: video/url
+    title_query: video/title
+    content_query: video/duration
+    thumbnail_query: video/thumb
+    timeout: 6.0
+  - name: bunkr albums
+    engine: xpath
+    shortcut: ba
+    categories: [images, files]
+    paging: true
+    page_size: 20
+    first_page_num: 1
+    search_url: "https://balbums.st/?search={query}&page={pageno}"
+    results_xpath: '//a[contains(@class, "card")]'
+    url_xpath: './@href'
+    title_xpath: './/h3/text()'
+    content_xpath: './/span[contains(text(), "files")]/text()'
+    thumbnail_xpath: './/img[contains(@class, "thumb-img")]/@src'
+    timeout: 8.0
+  - name: yahoo news
+    disabled: true
+  - name: github code
+    disabled: true
+  - name: openclipart
+    disabled: true
