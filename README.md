@@ -1,6 +1,6 @@
 # SearXNG
 
-Privacy-respecting metasearch engine, deployed as a downstream service behind the shared nginx reverse proxy. HTTP-only, no SSL (localhost use).
+Privacy-respecting metasearch engine, deployed as a downstream service behind the shared nginx reverse proxy, with TLS via the proxy's cert generator.
 
 ## Architecture
 
@@ -19,7 +19,7 @@ docker compose up -d
 docker compose ps
 ```
 
-Open `http://searxng.localhost/` (ensure the proxy cluster is up first and `*.localhost` resolves to it).
+Open `https://searxng.localhost/` (ensure the proxy cluster is up first and `*.localhost` resolves to it). For a LAN/self-signed proxy variant set `SEARXNG_GEN_SELF_SIGNED_CERT=true` in `.env` and recreate; the internet-facing variant issues a real cert via `ACME_HOST`.
 
 ## Usage
 
@@ -55,5 +55,5 @@ by category; the same works from the query box with `!` bangs:
 - Start order: the proxy cluster must be up first (it owns the `web-proxy` network).
 - `SEARXNG_SECRET` must be a long random value; changing it invalidates sessions.
 - `BASE_URL` derives from `BASE_DOMAIN`; changing `BASE_DOMAIN` moves the whole stack.
-- No TLS opt-ins (`ACME_HOST`, `GEN_SELF_SIGNED_CERT`) are declared: this stack is intentionally HTTP-only. To add HTTPS later, add both opt-ins per the proxy contract and set `homepage.href` to `https://`.
+- TLS: both proxy opt-ins (`ACME_HOST`, `GEN_SELF_SIGNED_CERT`) are declared; `BASE_URL` and `homepage.href` use `https://`. The self-signed path is driven by `SEARXNG_GEN_SELF_SIGNED_CERT` (default `false`).
 - Tracked defaults seed the `searxng-config` volume on first start only; afterwards the volume is authoritative. To change defaults, edit `searxng/docker/settings.yml`, rebuild, then reseed (remove service + volume, `up -d`). To tweak live settings only, edit `settings.yml` inside the volume and restart.

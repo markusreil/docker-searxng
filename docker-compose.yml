@@ -15,10 +15,13 @@ services:
     expose:
       - "8080"
     environment:
-      # Reverse-proxy contract: HTTP-only (no SSL), so only VIRTUAL_HOST.
+      # Reverse-proxy contract: both TLS opt-ins declared so the proxy
+      # variant decides which applies (ACME_HOST = real cert, GEN_SELF_SIGNED_CERT = LAN self-signed).
       VIRTUAL_HOST: *host-searxng
       VIRTUAL_PORT: "8080"
-      BASE_URL: http://searxng.${BASE_DOMAIN:?BASE_DOMAIN is required}/
+      ACME_HOST: *host-searxng
+      GEN_SELF_SIGNED_CERT: ${SEARXNG_GEN_SELF_SIGNED_CERT:-false}
+      BASE_URL: https://searxng.${BASE_DOMAIN:?BASE_DOMAIN is required}/
       SEARXNG_SECRET: ${SEARXNG_SECRET:?SEARXNG_SECRET is required}
     volumes:
       - searxng-config:/etc/searxng
@@ -29,7 +32,7 @@ services:
       homepage.group: ${HOMEPAGE_GROUP:-Search}
       homepage.name: ${HOMEPAGE_NAME:-SearXNG}
       homepage.icon: ${HOMEPAGE_ICON:-searxng}
-      homepage.href: http://searxng.${BASE_DOMAIN:?BASE_DOMAIN is required}/
+      homepage.href: https://searxng.${BASE_DOMAIN:?BASE_DOMAIN is required}/
       homepage.description: ${HOMEPAGE_DESCRIPTION:-Privacy-respecting metasearch engine}
 
 networks:

@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- TLS via nginx-proxy: `ACME_HOST` + `GEN_SELF_SIGNED_CERT` opt-ins (self-signed driven by `SEARXNG_GEN_SELF_SIGNED_CERT`, default `false`); `BASE_URL` and `homepage.href` now `https://`.
+
 - Initial SearXNG compose stack (HTTP-only, no SSL): compose file, env.example, README, AGENTS.md.
 - SearXNG build stage baking tracked `docker/settings.yml` in as seed template; ahmia/torch disabled.
 - Tuned seed defaults: reliable keyless engine core (brave, bing, duckduckgo, mojeek, marginalia upweighted), google/startpage/cloudflareai disabled, limiter off.
