@@ -55,5 +55,5 @@ by category; the same works from the query box with `!` bangs:
 - Start order: the proxy cluster must be up first (it owns the `web-proxy` network).
 - `SEARXNG_SECRET` must be a long random value; changing it invalidates sessions.
 - `BASE_URL` derives from `BASE_DOMAIN`; changing `BASE_DOMAIN` moves the whole stack.
-- TLS: `ACME_HOST` is declared so the proxy issues a real certificate; `BASE_URL` and `homepage.href` use `https://`. No self-signed opt-in.
+- TLS: both proxy opt-ins (`ACME_HOST`, `GEN_SELF_SIGNED_CERT`) are declared; `BASE_URL` and `homepage.href` use `https://`. The self-signed path is driven by `SEARXNG_GEN_SELF_SIGNED_CERT` (default `true`).
 - Tracked defaults seed the `searxng-config` volume on first start only; afterwards the volume is authoritative. To change defaults, edit `searxng/docker/settings.yml`, rebuild, then reseed (remove service + volume, `up -d`). To tweak live settings only, edit `settings.yml` inside the volume and restart.
