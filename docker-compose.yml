@@ -15,12 +15,11 @@ services:
     expose:
       - "8080"
     environment:
-      # Reverse-proxy contract: both TLS opt-ins declared so the proxy
-      # variant decides which applies (ACME_HOST = real cert, GEN_SELF_SIGNED_CERT = LAN self-signed).
+      # Reverse-proxy contract: ACME_HOST requests a real certificate
+      # (internet-facing proxy variant). No self-signed opt-in.
       VIRTUAL_HOST: *host-searxng
       VIRTUAL_PORT: "8080"
       ACME_HOST: *host-searxng
-      GEN_SELF_SIGNED_CERT: ${SEARXNG_GEN_SELF_SIGNED_CERT:-false}
       BASE_URL: https://searxng.${BASE_DOMAIN:?BASE_DOMAIN is required}/
       SEARXNG_SECRET: ${SEARXNG_SECRET:?SEARXNG_SECRET is required}
     volumes:
