@@ -29,6 +29,9 @@ services:
       - default
       - web-proxy
     labels:
+      # The proxy enables mutual TLS whenever a global ca.crt exists; the CA
+      # here is only for signing server certs, so opt this vhost back out.
+      com.github.nginx-proxy.nginx-proxy.ssl_verify_client: "off"
       homepage.group: ${HOMEPAGE_GROUP:-Search}
       homepage.name: ${HOMEPAGE_NAME:-SearXNG}
       homepage.icon: ${HOMEPAGE_ICON:-searxng}

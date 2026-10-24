@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - TLS via nginx-proxy: `ACME_HOST` + `GEN_SELF_SIGNED_CERT` opt-ins (self-signed driven by `SEARXNG_GEN_SELF_SIGNED_CERT`, default `true`); `BASE_URL` and `homepage.href` now `https://`.
+- Disabled nginx-proxy client-cert verification for this vhost (`ssl_verify_client: off` label): the shared `ca.crt` is only for signing server certs, and its presence otherwise forces mutual TLS.
 
 - Initial SearXNG compose stack (HTTP-only, no SSL): compose file, env.example, README, AGENTS.md.
 - SearXNG build stage baking tracked `docker/settings.yml` in as seed template; ahmia/torch disabled.
